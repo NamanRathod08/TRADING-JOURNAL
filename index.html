@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1020" />
+    <title>Ledgerly — Trading Journal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#dashboard"><span class="brand-mark">L</span><span>ledgerly</span></a>
+        <nav>
+          <button class="nav-link active" data-view="dashboard"><span>▦</span> Dashboard</button>
+          <button class="nav-link" data-view="trades"><span>↔</span> Trade history</button>
+          <button class="nav-link" data-view="journal"><span>✎</span> Journal notes</button>
+        </nav>
+        <div class="sidebar-bottom"><span class="status-dot"></span> Your data stays in this browser</div>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div><p class="eyebrow" id="pageEyebrow">TRADING PERFORMANCE</p><h1 id="pageTitle">Good morning, trader.</h1></div>
+          <button class="primary-btn" id="openTradeModal"><span>＋</span> Log a trade</button>
+        </header>
+
+        <section id="dashboard" class="view active">
+          <div class="summary-grid">
+            <article class="metric-card"><p>Net P&amp;L</p><strong id="netPnl">₹0.00</strong><small id="pnlContext">Start logging trades to see progress</small></article>
+            <article class="metric-card"><p>Win rate</p><strong id="winRate">—</strong><small id="winContext">No closed trades yet</small></article>
+            <article class="metric-card"><p>Avg. win / loss</p><strong id="avgWinLoss">—</strong><small id="avgContext">Risk reward will appear here</small></article>
+            <article class="metric-card"><p>Total trades</p><strong id="tradeCount">0</strong><small id="tradeContext">Your journal is ready</small></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">EQUITY CURVE</p><h2>Account performance</h2></div><span id="curveReturn" class="pill neutral">All time</span></div><div class="chart-wrap"><svg id="equityChart" viewBox="0 0 700 250" preserveAspectRatio="none" aria-label="Equity curve chart"></svg><div id="chartEmpty" class="chart-empty">Your equity curve will grow here.<br><button class="text-btn" data-open-trade>Log your first trade</button></div></div></article>
+            <article class="panel insight-panel"><div class="panel-heading"><div><p class="eyebrow">AT A GLANCE</p><h2>Trade quality</h2></div></div><div class="quality-row"><span>Best trade</span><strong id="bestTrade">—</strong></div><div class="quality-row"><span>Worst trade</span><strong id="worstTrade">—</strong></div><div class="quality-row"><span>Average hold</span><strong id="avgHold">—</strong></div><div class="quality-row"><span>Profit factor</span><strong id="profitFactor">—</strong></div></article>
+          </div>
+
+          <div class="dashboard-grid lower-grid">
+            <article class="panel"><div class="panel-heading"><div><p class="eyebrow">STRATEGY EDGE</p><h2>Performance by tag</h2></div><button class="text-btn" data-view-jump="trades">View all</button></div><div id="tagBreakdown" class="breakdown empty-state">Add tags to trades to discover what works.</div></article>
+            <article class="panel"><div class="panel-heading"><div><p class="eyebrow">RECENT ACTIVITY</p><h2>Latest trades</h2></div><button class="text-btn" data-view-jump="trades">Trade history</button></div><div id="recentTrades" class="recent-trades empty-state">Nothing here yet. Every great system starts with one trade.</div></article>
+          </div>
+        </section>
+
+        <section id="trades" class="view">
+          <div class="list-toolbar"><div class="search-wrap"><span>⌕</span><input id="searchTrades" placeholder="Search symbol, tag, or note" /></div><select id="tagFilter"><option value="">All tags</option></select><select id="sideFilter"><option value="">Long & short</option><option value="long">Long</option><option value="short">Short</option></select><input id="importCsvFile" type="file" accept=".csv,text/csv" hidden><button class="secondary-btn" id="importCsv">Import CSV</button><button class="secondary-btn" id="exportCsv">Export CSV</button></div>
+          <article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th data-sort="date">Date <span>↕</span></th><th data-sort="symbol">Symbol <span>↕</span></th><th>Side</th><th>Entry / Exit</th><th data-sort="quantity">Qty <span>↕</span></th><th data-sort="pnl">P&amp;L <span>↕</span></th><th>Tags</th><th></th></tr></thead><tbody id="tradeTableBody"></tbody></table></div><div id="tableEmpty" class="table-empty"><div class="empty-icon">↗</div><h2>No trades match this view</h2><p>Log your first trade and turn hindsight into an edge.</p><button class="primary-btn" data-open-trade>Log a trade</button></div></article>
+        </section>
+
+        <section id="journal" class="view"><div class="journal-intro"><p class="eyebrow">YOUR PATTERN LIBRARY</p><h2>Trade notes, not just trade numbers.</h2><p>The most valuable part of a journal is the honest review: why you entered, and what you learned.</p></div><div id="journalCards" class="journal-grid"></div><div id="journalEmpty" class="table-empty journal-empty"><div class="empty-icon">✎</div><h2>Your reflections will live here</h2><p>When you log a trade, include the setup and lesson. Future you will thank you.</p><button class="primary-btn" data-open-trade>Log a trade</button></div></section>
+      </main>
+    </div>
+
+    <div id="tradeModal" class="modal-backdrop" aria-hidden="true"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-header"><div><p class="eyebrow">EQUITY TRADE</p><h2 id="modalTitle">Log a trade</h2></div><button class="icon-btn" id="closeModal" aria-label="Close">×</button></div><form id="tradeForm"><div class="form-grid"><label>Symbol<input name="symbol" placeholder="e.g. RELIANCE" required maxlength="16" /></label><label>Position type<div class="segmented"><input type="radio" id="long" name="side" value="long" checked><label for="long">Long</label><input type="radio" id="short" name="side" value="short"><label for="short">Short</label></div></label><label>Entry price (₹)<input name="entryPrice" type="number" min="0.01" step="0.01" placeholder="0.00" required /></label><label>Exit price (₹)<input name="exitPrice" type="number" min="0.01" step="0.01" placeholder="0.00" required /></label><label>Quantity<input name="quantity" type="number" min="1" step="1" placeholder="0" required /></label><label>Entry date &amp; time<input name="entryDate" type="datetime-local" required /></label><label>Exit date &amp; time<input name="exitDate" type="datetime-local" required /></label><label>Tags <span class="label-help">comma separated</span><input name="tags" placeholder="breakout, momentum" /></label></div><div class="trade-preview"><span>Estimated P&amp;L</span><strong id="previewPnl">₹0.00</strong><span id="previewPct">0.00%</span></div><label class="full-label">Why did you take this trade?<textarea name="reason" placeholder="What did you see? What was the setup?" rows="3"></textarea></label><label class="full-label">What did you learn?<textarea name="lesson" placeholder="What will you repeat, avoid, or refine next time?" rows="3"></textarea></label><div class="form-actions"><button type="button" class="secondary-btn" id="cancelTrade">Cancel</button><button type="submit" class="primary-btn">Save trade</button></div></form></div></div>
+    <div id="toast" class="toast" role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
